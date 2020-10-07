@@ -1,8 +1,12 @@
 
 Bot local run guide:
+
 1: have python3 and discord.py installed
+
 2: cd to the folder with immunity-bot.pny in
+
 3: py -3 immunity-bot.py to cmd
+
 discord.py installation guide
 https://discordpy.readthedocs.io/en/latest/intro.html
 
