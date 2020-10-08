@@ -36,5 +36,5 @@ https://opensource.com/article/19/3/python-image-manipulation-tools
 gmagik reference
 https://gist.github.com/NotSoSuper/2b11fd687b1c24c4d352653e9a920848
 
-#NotSoBot idea stealing place
+# NotSoBot idea stealing place
 https://github.com/NotSoSuper/NotSoBot/blob/master/mods/Fun.py
