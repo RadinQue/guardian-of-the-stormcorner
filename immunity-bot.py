@@ -16,14 +16,14 @@ async def on_ready():
 async def on_message(message):
     if message.author == client.user:
         return
-    if message.content.startswith('.df'):
+    if message.content.startswith('..enhance'):
         if message.attachments:
             response = requests.get(message.attachments[0].url)
             img = Image.open(BytesIO(response.content))
-            img = img.filter(ImageEnhance.CONTRAST)
+            
             for i in range(8):
-                factor = i / 4.0
-                img.enhance(factor).show("Sharpness %f" % factor)
+                img = img.filter(ImageFilter.EDGE_ENHANCE_MORE)
+                
             img.save('./temp.png')
             file = discord.File("temp.png", filename="aaa.png")
             await message.channel.send("temp.png", file=file)
