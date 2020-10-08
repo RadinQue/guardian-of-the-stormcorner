@@ -10,7 +10,9 @@
   
 2: cd to the folder with immunity-bot.py in
 
-3: enter py -3 immunity-bot.py to terminal
+3: enter to terminal
+
+    py -3 immunity-bot.py to terminal
 
 # Discord.py
 
