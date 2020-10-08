@@ -1,4 +1,4 @@
-# Bot local run guide:
+# Bot local run guide
 
 1: install the required libraries
 
