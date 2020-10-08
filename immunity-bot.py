@@ -26,6 +26,6 @@ async def on_message(message):
                 
             img.save('./temp.png')
             file = discord.File("temp.png", filename="aaa.png")
-            await message.channel.send("temp.png", file=file)
+            await message.channel.send("enhancing..", file=file)
 
 client.run('NzYzNTM3MTU0NzAxMzkzOTIw.X35JYw.t3Lr-aHa6ccnPDVbh59KL1BXkwM')
