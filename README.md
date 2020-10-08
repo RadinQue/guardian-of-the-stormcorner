@@ -27,8 +27,11 @@ https://www.writebots.com/discord-bot-hosting/
 
 ..
 
-Still need to figure out which image manipulation library we should use.
-Some here? https://opensource.com/article/19/3/python-image-manipulation-tools
+Pillow (Python Imaging Library) help: check sidebar!
+https://pillow.readthedocs.io/en/stable/reference/ImageEnhance.html
+
+More image manipulation libraries here:
+https://opensource.com/article/19/3/python-image-manipulation-tools
 
 gmagik reference
 https://gist.github.com/NotSoSuper/2b11fd687b1c24c4d352653e9a920848
