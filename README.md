@@ -1,14 +1,18 @@
-
-Bot local run guide:
+# Bot local run guide
 
 1: install the required libraries
-  py -3 -m pip install pillow
-  py -3 -m pip install requests
-  py -3 -m pip install -U discord.py
 
+    py -3 -m pip install pillow
+  
+    py -3 -m pip install requests
+  
+    py -3 -m pip install -U discord.py
+  
 2: cd to the folder with immunity-bot.py in
 
-3: enter py -3 immunity-bot.py to terminal
+3: enter to terminal
+
+    py -3 immunity-bot.py to terminal
 
 # Discord.py
 
