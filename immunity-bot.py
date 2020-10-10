@@ -26,8 +26,11 @@ class Ops:
         return ImageEnhance.Color(img).enhance(saturation_amount)
 
     def apply_emboss(self, emboss_amount, img):
-        for i in range(emboss_amount):
+        i = 0
+        while i < emboss_amount:
             img = img.filter(ImageFilter.EDGE_ENHANCE_MORE)
+            i += 1
+
         return img
 
 
