@@ -19,6 +19,9 @@ class Ops:
         file = discord.File("img.png", filename="img.png")
         await channel.send("", file=file)
 
+    async def send_message_to_chat(self, message, channel):
+        await channel.send(message)
+
     def apply_contrast(self, contrast_amount, img):
         return ImageEnhance.Contrast(img).enhance(contrast_amount)
 
@@ -32,6 +35,21 @@ class Ops:
             i += 1
 
         return img
+
+    def mock(self, message):
+        formatted = message.split("..mock", 1)[1]
+        ret = ""
+        i = False
+        for char in formatted:
+            if i:
+                ret += char.upper()
+            else:
+                ret += char.lower()
+
+            if char != ' ':
+                i = not i
+
+        return ret
 
 
 ops = Ops()
@@ -56,5 +74,10 @@ async def on_message(message):
         if message.content.startswith('..df'):
             img = ops.apply_contrast(50, img)
             await ops.send_image_to_chat(img, message.channel)
+
+    if message.content.startswith('..mock'):
+        await ops.send_message_to_chat(ops.mock(message.content), message.channel)
+        ...
+
 
 client.run('NzYzNTM3MTU0NzAxMzkzOTIw.X35JYw.t3Lr-aHa6ccnPDVbh59KL1BXkwM')
