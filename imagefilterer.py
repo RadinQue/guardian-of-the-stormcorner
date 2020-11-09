@@ -3,7 +3,7 @@ from PIL import Image, ImageEnhance, ImageFilter
 class ImageFilterer:
 	
     def apply_contrast(self, contrast_amount, img):
-   		return ImageEnhance.Contrast(img).enhance(contrast_amount)
+   	return ImageEnhance.Contrast(img).enhance(contrast_amount)
 
     def saturate(self, saturation_amount, img):
         return ImageEnhance.Color(img).enhance(saturation_amount)
