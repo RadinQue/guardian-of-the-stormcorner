@@ -12,7 +12,7 @@
 
 3: enter to terminal
 
-    py -3 immunity-bot.py to terminal
+    py -3 immunity-bot.py
 
 # Discord.py
 
