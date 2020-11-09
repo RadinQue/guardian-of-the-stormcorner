@@ -14,7 +14,12 @@ class Ops:
     """ Sending messages """
 
     async def send_image_to_chat(self, img, channel):
-        img.save('./img.png')
+        try:
+            img.save('./img.png')
+        except Exception as e:
+            """ wand requires this """
+            img.save(filename = './img.png')
+
         file = discord.File("img.png", filename="img.png")
         await channel.send("", file=file)
 
@@ -42,6 +47,20 @@ class Ops:
         try:
             img = urlparser.get_image_object_from_url(self.last_sent_image_url)
             img = imagefilterer.apply_contrast(50, img)
+            await self.send_image_to_chat(img, message.channel)
+        except Exception as e:
+            print(e)
+            await self.send_message_to_chat("No image found", message.channel)
+
+    async def do_magik(self, message):
+        try:
+            img = urlparser.get_image_object_from_url(self.last_sent_image_url)
+            scale = messageparser.get_int_from_command_message(message)
+            try:
+               scale = int(scale)
+            except ValueError:
+                scale = 1
+            img = imagefilterer.apply_magik(scale, img)
             await self.send_image_to_chat(img, message.channel)
         except Exception as e:
             print(e)

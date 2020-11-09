@@ -21,6 +21,9 @@ async def on_message(message):
     if message.content.startswith('..df'):
         await ops.do_df(message)
 
+    if message.content.startswith('..mag'):
+        await ops.do_magik(message)
+
     if message.content.startswith('..mock'):
         await ops.do_mock(message)
 

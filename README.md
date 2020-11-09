@@ -1,12 +1,16 @@
 # Bot local run guide
 
-1: install the required libraries
+1: install the required dependencies
 
     py -3 -m pip install pillow
   
     py -3 -m pip install requests
   
     py -3 -m pip install -U discord.py
+
+2: install imagemagick (windows)
+	
+https://docs.wand-py.org/en/latest/guide/install.html#install-imagemagick-on-windows
   
 2: cd to the folder with immunity-bot.py in
 

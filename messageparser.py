@@ -10,6 +10,12 @@ class MessageParser:
             return message.content[message.content.index(' '):len(message.content)]
         except Exception as e:
             return ""
+            
+    def get_int_from_command_message(self, message):
+        try:
+            return message.content[message.content.index(' ')+1:message.content.index(' ')+2]
+        except Exception as e:
+            return ""
 
     def get_image_url_from_message(self, message):
         attachments = message.embeds + message.attachments
