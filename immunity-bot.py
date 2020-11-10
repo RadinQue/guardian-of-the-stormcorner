@@ -27,6 +27,12 @@ async def on_message(message):
     if message.content.startswith('..mock'):
         await ops.do_mock(message)
 
+    if message.content.startswith('..yoi'):
+        await ops.do_yoi(message)
+
+    if message.content.startswith('..loud'):
+        await ops.do_loud(message)
+
 try:
     client.run('NzYzNTM3MTU0NzAxMzkzOTIw.X35JYw.t3Lr-aHa6ccnPDVbh59KL1BXkwM')
 except Exception as e:
