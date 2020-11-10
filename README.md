@@ -5,6 +5,8 @@
     py -3 -m pip install pillow
   
     py -3 -m pip install requests
+
+    py -3 -m pip install pyo
   
     py -3 -m pip install -U discord.py
 
@@ -12,9 +14,9 @@
 	
 https://docs.wand-py.org/en/latest/guide/install.html#install-imagemagick-on-windows
   
-2: cd to the folder with immunity-bot.py in
+3: cd to the folder with immunity-bot.py in
 
-3: enter to terminal
+4: enter to terminal
 
     py -3 immunity-bot.py
 

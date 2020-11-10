@@ -1,10 +1,12 @@
 from messageparser import MessageParser
 from imagefilterer import ImageFilterer
+from soundfilterer import SoundFilterer
 from urlparser import URLParser
 import discord
 
 messageparser = MessageParser()
 imagefilterer = ImageFilterer()
+soundfilterer = SoundFilterer()
 urlparser = URLParser()
 
 class Ops:
@@ -21,6 +23,10 @@ class Ops:
             img.save(filename = './img.png')
 
         file = discord.File("img.png", filename="img.png")
+        await channel.send("", file=file)
+
+    async def send_audio_to_chat(self, channel):
+        file = discord.File("sound.mp3", filename="sound.mp3")
         await channel.send("", file=file)
 
     async def send_message_to_chat(self, message, channel):
@@ -41,7 +47,7 @@ class Ops:
             await self.send_image_to_chat(img, message.channel)
         except Exception as e:
             print(e)
-            await self.send_message_to_chat("No image found", message.channel)
+            await self.send_message_to_chat("No image found / Processing error", message.channel)
 
     async def do_df(self, message):
         try:
@@ -50,7 +56,7 @@ class Ops:
             await self.send_image_to_chat(img, message.channel)
         except Exception as e:
             print(e)
-            await self.send_message_to_chat("No image found", message.channel)
+            await self.send_message_to_chat("No image found / Processing error", message.channel)
 
     async def do_magik(self, message):
         try:
@@ -64,7 +70,27 @@ class Ops:
             await self.send_image_to_chat(img, message.channel)
         except Exception as e:
             print(e)
-            await self.send_message_to_chat("No image found", message.channel)
+            await self.send_message_to_chat("No image found / Processing error", message.channel)
+
+    """ Audio commands """
+
+    async def do_yoi(self, message):
+        try:
+            urlparser.save_audio_from_url(message.attachments[0].url)
+            await soundfilterer.add_yoi()
+            await self.send_audio_to_chat(message.channel)
+        except Exception as e:
+            print(e)
+            await self.send_message_to_chat("No sound found / Processing error", message.channel)
+
+    async def do_loud(self, message):
+        try:
+            urlparser.save_audio_from_url(message.attachments[0].url)
+            await soundfilterer.max_distortion()
+            await self.send_audio_to_chat(message.channel)
+        except Exception as e:
+            print(e)
+            await self.send_message_to_chat("No sound found / Processing error", message.channel)   
 
     """ Text commands """
 
