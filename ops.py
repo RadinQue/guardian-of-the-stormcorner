@@ -38,6 +38,10 @@ class Ops:
         if messageparser.message_contains_image(message):
             self.last_sent_image_url = messageparser.get_image_url_from_message(message)
 
+    def cleanup_after_message(self, message):
+        soundfilterer.clean_all_temp_files();
+        imagefilterer.clean_all_temp_files();
+
     """ Image commands """
 
     async def do_enhance(self, message):

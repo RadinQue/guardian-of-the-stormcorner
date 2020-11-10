@@ -15,7 +15,7 @@ async def on_message(message):
     
     ops.interpret_message(message)
 
-    if message.content.startswith('..enhance'):
+    if message.content.startswith('..en'):
         await ops.do_enhance(message)
 
     if message.content.startswith('..df'):
@@ -32,6 +32,8 @@ async def on_message(message):
 
     if message.content.startswith('..loud'):
         await ops.do_loud(message)
+
+    ops.cleanup_after_message(message)
 
 try:
     client.run('NzYzNTM3MTU0NzAxMzkzOTIw.X35JYw.t3Lr-aHa6ccnPDVbh59KL1BXkwM')

@@ -2,8 +2,16 @@ from PIL import Image, ImageEnhance, ImageFilter
 from io import BytesIO
 from wand.color import Color
 import wand, wand.drawing
+from os import path
+import os
 
 class ImageFilterer:
+
+    def clean_all_temp_files(self):
+        possible_temp_files = ["img.png","img.jpg"]
+        for file in possible_temp_files:
+            if path.exists(file):
+                os.remove(file)
 
     def apply_contrast(self, contrast_amount, img):
     	return ImageEnhance.Contrast(img).enhance(contrast_amount)
