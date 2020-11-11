@@ -1,5 +1,7 @@
 # Bot local run guide on Windows
 
+This project currently runs on Python 3.8
+
 1: install the required dependencies
 
     py -3 -m pip install pillow
