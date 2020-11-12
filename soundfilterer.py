@@ -22,12 +22,12 @@ class SoundFilterer:
 		self.sound_info = sndinfo("temp.wav")
 
 		""" since right now we're bouncing everything to wav anyway this part should be simplified """
-		self.sound_duration, self.sampling_rate, self.channels = self.sound_info[1], self.sound_info[2], self.sound_info[3]
+		self.sound_duration, self.sampling_rate, self.sound_channels = self.sound_info[1], self.sound_info[2], self.sound_info[3]
 		self.sound_file_format = ['WAVE', 'AIFF', 'AU', 'RAW', 'SD2', 'FLAC', 'CAF', 'OGG'].index(self.sound_info[4])
 		self.samptype = ['16 bit int', '24 bit int', '32 bit int', '32 bit float', '64 bits float', 'U-Law encoded', 'A-Law encoded'].index(self.sound_info[5])
 		
 		# setting server parameters
-		self.audio_server.setSamplingRate(self.channels)
+		self.audio_server.setSamplingRate(self.sampling_rate)
 		self.audio_server.setNchnls(self.sound_channels)
 		self.audio_server.boot()
 		self.audio_server.recordOptions(dur=self.sound_duration, filename="sound.wav", fileformat=self.sound_file_format, sampletype=self.samptype)
