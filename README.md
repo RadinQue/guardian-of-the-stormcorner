@@ -9,6 +9,8 @@ This project currently runs on Python 3.8
     py -3 -m pip install requests
 
     py -3 -m pip install pyo
+    
+    py -3 -m pip install wand
   
     py -3 -m pip install -U discord.py
 
