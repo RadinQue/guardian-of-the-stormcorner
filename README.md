@@ -15,6 +15,8 @@ This project currently runs on Python 3.8
     py -3 -m pip install -U discord.py
 
     py -3 -m pip install wxpython (optional: we don't use this but it stops pyo from complaining each launch)
+    
+    py -3 -m pip install numpy==1.19.3
 
 2: install imagemagick (windows)
 	
