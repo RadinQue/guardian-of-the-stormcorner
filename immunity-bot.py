@@ -24,6 +24,12 @@ async def on_message(message):
     if message.content.startswith('..mag'):
         await ops.do_magik(message)
 
+    if message.content.startswith('..haah'):
+        await ops.do_haah(message)
+
+    if message.content.startswith('..waaw'):
+        await ops.do_waaw(message)
+
     if message.content.startswith('..mock'):
         await ops.do_mock(message)
 

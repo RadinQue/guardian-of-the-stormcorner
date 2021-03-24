@@ -80,6 +80,24 @@ class Ops:
             print(e)
             await self.send_message_to_chat("No image found / Processing error", message.channel)
 
+    async def do_haah(self, message):
+        try:
+            img = urlparser.get_image_object_from_url(self.last_sent_image_url)
+            img = imagefilterer.apply_haah(img)
+            await self.send_image_to_chat(img, message.channel)
+        except Exception as e:
+            print(e)
+            await self.send_message_to_chat("No image found / Processing error", message.channel)
+
+    async def do_waaw(self, message):
+        try:
+            img = urlparser.get_image_object_from_url(self.last_sent_image_url)
+            img = imagefilterer.apply_waaw(img)
+            await self.send_image_to_chat(img, message.channel)
+        except Exception as e:
+            print(e)
+            await self.send_message_to_chat("No image found / Processing error", message.channel)
+
     """ Audio commands """
 
     async def do_yoi(self, message):
