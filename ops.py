@@ -25,6 +25,10 @@ class Ops:
         file = discord.File("img.png", filename="img.png")
         await channel.send("", file=file)
 
+    async def send_file_to_chat(self, file_location, channel):
+        file = discord.File(file_location)
+        await channel.send("", file=file)
+
     async def send_audio_to_chat(self, channel):
         file = discord.File("sound.mp3", filename="sound.mp3")
         await channel.send("", file=file)
@@ -115,3 +119,13 @@ class Ops:
         except Exception as e:
             print(e)
             await self.send_message_to_chat("Can't mock you if you're not saying anything", message.channel)
+
+    """ One-off memes """
+
+    async def do_tecc_tip(self, message):
+        try:
+            await self.send_message_to_chat("tip", message.channel)
+            await self.send_file_to_chat("res/tecc-tip.png", message.channel)
+        except Exception as e:
+            print(e)
+            await self.send_message_to_chat("Sorry chief, no tecc tip for you today", message.channel)

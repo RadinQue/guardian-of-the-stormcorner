@@ -27,6 +27,9 @@ async def on_message(message):
     if message.content.startswith('..mock'):
         await ops.do_mock(message)
 
+    if message.content.startswith('..tecc'):
+        await ops.do_tecc_tip(message)
+
     if message.content.startswith('..yoi'):
         await ops.do_yoi(message)
 
