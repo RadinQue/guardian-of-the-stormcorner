@@ -9,6 +9,7 @@ imagefilterer = ImageFilterer()
 soundfilterer = SoundFilterer()
 urlparser = URLParser()
 
+
 class Ops:
 
     last_sent_image_url = "unset"
@@ -20,7 +21,7 @@ class Ops:
             img.save('./img.png')
         except Exception as e:
             """ wand requires this """
-            img.save(filename = './img.png')
+            img.save(filename='./img.png')
 
         file = discord.File("img.png", filename="img.png")
         await channel.send("", file=file)
@@ -40,11 +41,12 @@ class Ops:
 
     def interpret_message(self, message):
         if messageparser.message_contains_image(message):
-            self.last_sent_image_url = messageparser.get_image_url_from_message(message)
+            self.last_sent_image_url = messageparser.get_image_url_from_message(
+                message)
 
     def cleanup_after_message(self, message):
-        soundfilterer.clean_all_temp_files();
-        imagefilterer.clean_all_temp_files();
+        soundfilterer.clean_all_temp_files()
+        imagefilterer.clean_all_temp_files()
 
     """ Image commands """
 
@@ -71,7 +73,7 @@ class Ops:
             img = urlparser.get_image_object_from_url(self.last_sent_image_url)
             scale = messageparser.get_int_from_command_message(message)
             try:
-               scale = int(scale)
+                scale = int(scale)
             except ValueError:
                 scale = 1
             img = imagefilterer.apply_magik(scale, img)
@@ -116,7 +118,7 @@ class Ops:
             await self.send_audio_to_chat(message.channel)
         except Exception as e:
             print(e)
-            await self.send_message_to_chat("No sound found / Processing error", message.channel)   
+            await self.send_message_to_chat("No sound found / Processing error", message.channel)
 
     """ Text commands """
 

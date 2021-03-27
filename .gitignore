@@ -2,3 +2,4 @@
 .idea/
 img.png
 .vscode/settings.json
+__pycache__/
