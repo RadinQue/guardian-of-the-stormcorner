@@ -1,5 +1,5 @@
 from io import BytesIO
-from pyo import *
+from pyo import Server, sndinfo, SfPlayer, Sine, IRFM, Disto, Interp
 from os import path
 import os
 import requests

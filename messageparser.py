@@ -22,7 +22,11 @@ class MessageParser:
         attachments = message.embeds + message.attachments
         for val in attachments:
             return val.url
-        return self.get_contents_from_command_message(message)
+
+        retmessage = self.get_contents_from_command_message(message)
+        if retmessage:
+            return retmessage
+
         return "No image found"
 
     """ Message contains... """

@@ -48,13 +48,13 @@ class ImageFilterer:
         i = wand.image.Image(filename="./img2.png")
         i.format = 'jpg'
         i.background_color = Color("white")
-        i.transform(resize='800x800>')
+        i.transform(resize='800x800')
 
         """ not having a proper copy of i is quite nasty, better solution needed """
         i2 = wand.image.Image(filename="./img2.png")
         i2.format = 'jpg'
         i2.background_color = Color("white")
-        i2.transform(resize='800x800>')
+        i2.transform(resize='800x800')
 
         i.flop()
         i2.crop(0, 0, width=400, height=800)
@@ -68,13 +68,14 @@ class ImageFilterer:
         i = wand.image.Image(filename="./img2.png")
         i.format = 'jpg'
         i.background_color = Color("white")
-        i.transform(resize='800x800>')
+        i.transform(resize='800x800')
 
         """ not having a proper copy of i is quite nasty, better solution needed """
+        # i2 = i
         i2 = wand.image.Image(filename="./img2.png")
         i2.format = 'jpg'
         i2.background_color = Color("white")
-        i2.transform(resize='800x800>')
+        i2.transform(resize='800x800')
 
         i2.flop()
         i2.crop(0, 0, width=400, height=800)
