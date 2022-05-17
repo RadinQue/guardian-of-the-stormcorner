@@ -24,7 +24,8 @@ This project currently runs on Python 3.8
     
     py -3 -m pip install numpy==1.19.3
 
-wxypython is optional: we don't use this but it stops pyo from complaining each launch) 
+wxypython is optional: we don't use this but it stops pyo from complaining each launch
+
 **2.a: install imagemagick** (windows)
 	
 https://docs.wand-py.org/en/latest/guide/install.html#install-imagemagick-on-windows
