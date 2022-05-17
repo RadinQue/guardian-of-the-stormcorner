@@ -24,7 +24,7 @@ async def on_message(message):
     ops.cleanup_after_message(message)
 
 try:
-    client.run('NzYzNTM3MTU0NzAxMzkzOTIw.X35JYw.t3Lr-aHa6ccnPDVbh59KL1BXkwM')
+    client.run('')
 except Exception as e:
     print(e)
     print("Can't connect to Discord servers!")
