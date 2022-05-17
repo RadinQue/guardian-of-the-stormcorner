@@ -1,8 +1,14 @@
-# Bot local run guide on Windows
+# immunity-bot
+
+immunity bot aka. the guardian of the stormcorner is a python based discord bot we wrote so we can use the "magik" meme command whenever notsobot's offline. we added some of our own extra features along the way
+
+as the bot was written for use only in our private server, it is **not** designed for use in multiple servers at once. **only run this on one server per api key**. we may change this later.
+
+# Bot local run guide
 
 This project currently runs on Python 3.8
 
-1: install the required dependencies with py -3 -m pip install:
+**1: install the required dependencies with py -3 -m pip install:**
 
     py -3 -m pip install pillow
   
@@ -18,27 +24,29 @@ This project currently runs on Python 3.8
     
     py -3 -m pip install numpy==1.19.3 (yes, that specific version)
 
-2: install imagemagick (windows)
+**2.a: install imagemagick** (windows)
 	
 https://docs.wand-py.org/en/latest/guide/install.html#install-imagemagick-on-windows
+**
+**2.b: install imagemagick** (linux): enter to terminal**
+	
+	sudo apt install imagemagick
  
-3: go to immunity-bot.py line 27 and paste your api key into client.run('key here')
+**3: go to immunity-bot.py line 27 and paste your api key into client.run('key here')**
  
-4: cd to the folder with immunity-bot.py in
+**4: cd to the folder with immunity-bot.py in**
 
-5: enter to terminal
+**5: enter to terminal**
 
     py -3 immunity-bot.py
 
-# Discord.py
+# Some of the resourced we used
 
 discord.py documentation
 https://github.com/Rapptz/discord.py
 
 Minimal bot template
 https://discordpy.readthedocs.io/en/latest/quickstart.html#a-minimal-bot
-
-# Image manipulation
 
 Pillow (Python Imaging Library) - check sidebar
 https://pillow.readthedocs.io/en/stable/reference/ImageEnhance.html
@@ -49,12 +57,8 @@ https://docs.wand-py.org/en/0.6.3/
 fun.py reference (yes we ripped it off)
 https://github.com/NotSoSuper/NotSoBot/blob/master/mods/Fun.py
 
-# Audio manipulation
-
 pyo documentation
 http://ajaxsoundstudio.com/pyodoc/api/
-
-# More guides
 
 Discord bot general guide
 https://www.writebots.com/how-to-make-a-discord-bot/
