@@ -4,7 +4,7 @@ This project currently runs on Python 3.8
 
 1: install the required dependencies with py -3 -m pip install:
 
-    pillow
+    py -3 -m pip install pillow
   
     py -3 -m pip install requests
 
