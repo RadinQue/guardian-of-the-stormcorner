@@ -26,11 +26,11 @@ This project currently runs on Python 3.8
 
 wxypython is optional: we don't use this but it stops pyo from complaining each launch
 
-**2.a: install imagemagick** (windows)
+**2.a: install imagemagick (windows)**
 	
 https://docs.wand-py.org/en/latest/guide/install.html#install-imagemagick-on-windows
 
-**2.b: install imagemagick** (linux): enter to terminal**
+**2.b: install imagemagick (linux): enter to terminal**
 	
 	sudo apt install imagemagick
  
