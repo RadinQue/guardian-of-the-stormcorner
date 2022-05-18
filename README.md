@@ -44,7 +44,7 @@ https://docs.wand-py.org/en/latest/guide/install.html#install-imagemagick-on-win
 
     py -3 immunity-bot.py
 
-# Some of the resourced we used
+# Some of the resources we used
 
 discord.py documentation
 https://github.com/Rapptz/discord.py
