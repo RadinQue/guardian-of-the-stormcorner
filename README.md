@@ -4,6 +4,8 @@ immunity bot aka. the guardian of the stormcorner is a python based discord bot 
 
 as the bot was written for use only in our private server, it is **not** designed for use in multiple servers at once. **only run this on one server per api key**. we may change this later.
 
+We bundled an ffmpeg.exe with the repo, up to you if you want to use a random exe from github haha feel free to use your own one.
+
 # Bot local run guide
 
 This project currently runs on Python 3.8
