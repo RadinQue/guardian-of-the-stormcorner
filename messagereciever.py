@@ -1,7 +1,10 @@
+from ops import Ops
+
+
 class MessageReciever:
     """ Handles operator selection """
 
-    async def do_handle_message(self, message, ops):
+    async def do_handle_message(self, message, ops: Ops):
         if message.content.startswith('..en'):
             await ops.do_enhance(message)
 
@@ -28,3 +31,6 @@ class MessageReciever:
 
         if message.content.startswith('..loud'):
             await ops.do_loud(message)
+
+        if message.content.startswith('..prune'):
+            await ops.do_prune(message)

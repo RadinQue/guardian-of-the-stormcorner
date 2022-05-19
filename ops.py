@@ -1,14 +1,17 @@
+import time
 from messageparser import MessageParser
 from imagefilterer import ImageFilterer
 from soundfilterer import SoundFilterer
 from urlparser import URLParser
 import discord
+from discord import Message
 
 messageparser = MessageParser()
 imagefilterer = ImageFilterer()
 soundfilterer = SoundFilterer()
 urlparser = URLParser()
 
+PRUNE_MESSAGE_HARD_LIMIT = 50
 
 class Ops:
 
@@ -36,6 +39,9 @@ class Ops:
 
     async def send_message_to_chat(self, message, channel):
         await channel.send(message)
+
+    async def send_message_to_chat_return(self, message, channel):
+        return await channel.send(message)
 
     """ Receiving messages """
 
@@ -139,6 +145,59 @@ class Ops:
         except Exception as e:
             print(e)
             await self.send_message_to_chat("Can't mock you if you're not saying anything", message.channel)
+
+    """ Moderation commands """
+
+    async def do_prune(self, message: Message):
+        """ ..prune <amount> <sudo-command> """
+        channel = message.channel
+
+        parameters = message.content.split(" ", 2)
+        amount = 0
+        if len(parameters) >= 2:
+            if parameters[1] == "MAX":
+                amount = PRUNE_MESSAGE_HARD_LIMIT
+            else:
+                amount = int(parameters[1])
+
+        force_overflow = False
+        if len(parameters) >= 3:
+            force_overflow = parameters[2] == "IKNOWWHATIAMDOING"
+
+        if amount == 0:
+            await self.send_message_to_chat("Prune explicitly requires the user to specify the amount of messages to be removed.", channel)
+            await self.send_message_to_chat("If you want to bypass this limit, please provide the command a second argument: IKNOWWHATIAMDOING", channel)
+            return
+
+        message_count = 0
+        if force_overflow:
+            messages_to_delete = amount
+        else:
+            messages_to_delete = min(amount, PRUNE_MESSAGE_HARD_LIMIT)
+
+        await message.delete()
+
+        async for message in channel.history(limit=messages_to_delete):
+            # unless the user explicitly wants to delete more messages,
+            if not force_overflow:
+                # double checking for both limits
+                # we don't want to delete more than expected
+                if message_count >= PRUNE_MESSAGE_HARD_LIMIT:
+                    break
+
+                if message_count >= amount:
+                    break
+
+            await message.delete()
+            message_count = message_count + 1
+            
+        confirmation_message = "Deleted " + str(message_count) + " messages!"
+        if not force_overflow and amount > PRUNE_MESSAGE_HARD_LIMIT:
+            confirmation_message += " (Your specified amount hit the hard limit which is " + str(PRUNE_MESSAGE_HARD_LIMIT) + ")"
+        
+        self_destruct_message = await self.send_message_to_chat_return(confirmation_message, channel)
+        time.sleep(5)
+        await self_destruct_message.delete()
 
     """ One-off memes """
 
