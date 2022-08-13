@@ -5,6 +5,7 @@ from soundfilterer import SoundFilterer
 from urlparser import URLParser
 import discord
 from discord import Message
+from PIL import Image
 
 messageparser = MessageParser()
 imagefilterer = ImageFilterer()
@@ -105,6 +106,17 @@ class Ops:
         except Exception as e:
             print(e)
             await self.send_message_to_chat("No image found / Processing error", message.channel)
+
+    async def do_skrillex(self, message):
+        try:
+            img = urlparser.get_image_object_from_url(self.last_sent_image_url)
+            color = messageparser.get_hex_from_command_message(message)
+            img = imagefilterer.apply_skrillex_feet(img, color)
+            await self.send_image_to_chat(img, message.channel)
+        except Exception as e:
+            print(e)
+            await self.send_message_to_chat("No image found / Processing error", message.channel)
+
 
     """ Audio commands """
 

@@ -1,4 +1,6 @@
+from typing import Literal
 from PIL import Image, ImageEnhance, ImageFilter
+import numpy as np
 from io import BytesIO
 from wand.color import Color
 import wand
@@ -82,3 +84,25 @@ class ImageFilterer:
         i.composite(i2, left=0, top=0)
         i.save(filename="./img.png")
         return i
+
+    def apply_skrillex_feet(self, img: Image, rgb_mask_str: str):
+        skrillex_img = Image.open("res/skrillex-feet.png")
+
+        width = img.width
+        height = img.height
+        skrillex_img = skrillex_img.resize([width, height]);
+
+        img = img.convert("RGBA")
+        data = img.getdata()
+
+        h = rgb_mask_str.lstrip('#')
+        rgb_mask_color = tuple(int(h[i:i+2], 16) for i in (0, 2, 4))
+
+        new_data = [item if item[:-1] != rgb_mask_color else (255, 255, 255, 0) for item in data]
+
+        img.putdata(new_data)
+
+        skrillex_img.paste(img, (0, 0), img);
+
+        return skrillex_img
+

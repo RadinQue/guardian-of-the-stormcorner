@@ -34,3 +34,6 @@ class MessageReciever:
 
         if message.content.startswith('..prune'):
             await ops.do_prune(message)
+
+        if message.content.startswith('..skrillex'):
+            await ops.do_skrillex(message)
