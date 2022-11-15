@@ -13,7 +13,7 @@ api_key = ''
 # whether or not we have to create the key file
 create_file = False
 
-client = discord.Client()
+client = discord.Client(intents=discord.Intents.default())
 ops = Ops()
 msgreciever = MessageReciever()
 
