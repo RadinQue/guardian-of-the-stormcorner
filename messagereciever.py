@@ -1,10 +1,10 @@
 from ops import Ops
 
-
 class MessageReciever:
     """ Handles operator selection """
-
     async def do_handle_message(self, message, ops: Ops):
+        await ops.do_loudwarningcheck(message)
+
         if message.content.startswith('..en'):
             await ops.do_enhance(message)
 

@@ -220,3 +220,24 @@ class Ops:
         except Exception as e:
             print(e)
             await self.send_message_to_chat("Sorry chief, no tecc tip for you today", message.channel)
+
+    """ Misc """
+
+    async def do_loudwarningcheck(self, message):
+        try:
+            if message.author.name == 'Cherry412':
+                extensionsToCheck = ['.mp3', '.wav', '.mp4']
+                self.potentiallyLoudFound=False
+
+                if any(ext in message.content for ext in extensionsToCheck):
+                    self.potentiallyLoudFound=True
+
+                for att in message.attachments:
+                    if any(ext in att.filename for ext in extensionsToCheck):
+                        self.potentiallyLoudFound=True
+                
+                if self.potentiallyLoudFound:
+                    print("potentially loud media by cherry detected")
+                    await self.send_message_to_chat(":warning: Potentially loud media sent by Cherry412 - check your volume levels before pressing play!! :warning: ", message.channel)
+        except Exception as e:
+            print(e)
