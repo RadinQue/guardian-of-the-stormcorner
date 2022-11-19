@@ -37,3 +37,6 @@ class MessageReciever:
 
         if message.content.startswith('..skrillex'):
             await ops.do_skrillex(message)
+
+        if message.content.startswith('..coin'):
+            await ops.do_heads_or_tails(message)

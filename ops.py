@@ -1,4 +1,5 @@
 import time
+import random
 from messageparser import MessageParser
 from imagefilterer import ImageFilterer
 from soundfilterer import SoundFilterer
@@ -241,3 +242,15 @@ class Ops:
                     await self.send_message_to_chat(":warning: Potentially loud media sent by Cherry412 - check your volume levels before pressing play!! :warning: ", message.channel)
         except Exception as e:
             print(e)
+
+    async def do_heads_or_tails(self, message):
+        result = bool(random.getrandbits(1))
+        await self.send_message_to_chat("Flipping coin...", message.channel)
+        time.sleep(1)
+        result_msg = ""
+        if result:
+            result_msg = "Heads!"
+        else:
+            result_msg = "Tails!"
+        
+        await self.send_message_to_chat(result_msg, message.channel)
