@@ -1,0 +1,8 @@
+{
+    "overlays": [
+        {
+            "keyword": "mutasoy",
+            "resource": "mutasoy.png"
+        }
+    ]
+}

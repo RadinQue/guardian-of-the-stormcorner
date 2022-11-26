@@ -40,3 +40,6 @@ class MessageReciever:
 
         if message.content.startswith('..coin'):
             await ops.do_heads_or_tails(message)
+
+        if message.content.startswith('..overlay'):
+            await ops.do_overlay(message)

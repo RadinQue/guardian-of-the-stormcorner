@@ -7,6 +7,8 @@ from urlparser import URLParser
 import discord
 from discord import Message
 from PIL import Image
+import json
+import os
 
 messageparser = MessageParser()
 imagefilterer = ImageFilterer()
@@ -254,3 +256,127 @@ class Ops:
             result_msg = "Tails!"
         
         await self.send_message_to_chat(result_msg, message.channel)
+
+    ## Overlay command
+    ## Takes the image from the message and a keyword.
+    ## Looks for a previously saved image and overlays that with the image in the message
+    #  @param message The message from the user
+    async def do_overlay(self, message):
+        overlay_obj = OverlayCommand(self.last_sent_image_url)
+
+        parameters = message.content.split(" ", 2)
+        # work out the command
+        # if the params list is only 2 that means it's ..overlay 'keyword'
+        if len(parameters) == 2:
+            keyword = parameters[1]
+            ret_img, error_msg = await overlay_obj.do_overlay(keyword)
+
+            if error_msg == "":
+                await self.send_image_to_chat(ret_img, message.channel)
+            else:
+                await self.send_message_to_chat(error_msg, message.channel)
+
+            return
+
+        intent = parameters[1]
+        keyword = parameters[2]
+
+        if intent == "" or keyword == "":
+            await self.send_message_to_chat("Invalid arguments.\n..overlay <intent> <keyword> OR ..overlay <keyword>", message.channel)
+
+        ret_msg = ""
+
+        if intent == "add":
+            # ..overlay add 'keyword'
+            ret_msg = await overlay_obj.add_overlay(keyword)
+        elif intent == "remove" or intent == "delete":
+            # overlay remove 'keyword'
+            ret_msg = await overlay_obj.remove_overlay(keyword)
+
+        if ret_msg != "":
+            await self.send_message_to_chat(ret_msg, message.channel)
+
+        del overlay_obj
+
+
+class OverlayCommand:
+    image_url = "None"
+
+    overlays_database = None
+
+    def __init__(self, url):
+        self.overlays_database = json.load(open("res/overlay/database.json"))
+        self.image_url = url
+
+    async def add_overlay(self, keyword):
+        # check if keyword isn't already added
+        try:
+            image = urlparser.get_image_object_from_url(self.image_url)
+
+            if self.search_resource(self.overlays_database, keyword) != None:
+                return "Keyword '" + keyword + "' is already an existing keyword.\nTo delete it, type '..overlay delete " + keyword + "'."
+            
+            extension = urlparser.get_extension_from_url(self.image_url)
+
+            try:
+                image.save("res/overlay/" + keyword + extension)
+            except Exception as e:
+                print(e)
+                return "Could not save the image."
+        except:
+            return "Couldn't get image object."
+        
+        new_data = {"keyword": keyword,
+                    "resource": keyword + extension}
+
+        self.write_json(new_data)
+        return "Keyword: '" + keyword + "' was added an associated with '" + keyword + extension + "'"
+
+    async def remove_overlay(self, keyword):
+        if self.search_resource(self.overlays_database, keyword) == None:
+            return "Couldn't find the provided keyword.\nTo add it, type '..overlay add '" + keyword + "' and provide the image to associate it with!"
+
+        filename = self.search_resource(self.overlays_database, keyword)
+        self.remove_json_obj(keyword)
+        os.remove("res/overlay/" + filename)
+        return "Successfully removed '" + keyword + "'."
+
+    async def do_overlay(self, keyword):
+        if self.search_resource(self.overlays_database, keyword) == None:
+            return None, "Couldn't find the provided keyword.\nTo add it, type '..overlay add '" + keyword + "' and provide the image to associate it with!"
+
+        try:
+            image = urlparser.get_image_object_from_url(self.image_url)
+            
+            filename = self.search_resource(self.overlays_database, keyword)
+            overlay = Image.open("res/overlay/" + filename)
+            filter_result = imagefilterer.overlay_images(image, overlay)
+        except:
+            return None, "Couldn't get image object."
+
+        return filter_result, ""
+
+    """ Helper Functions """
+
+    def search_resource(self, jsondata, keyword):
+        for keyval in jsondata['overlays']:
+            if keyword.lower() == keyval['keyword'].lower():
+                return keyval['resource']
+
+    def write_json(self, data, filename='res/overlay/database.json'):
+        with open(filename, 'r+') as file:
+            file_data = json.load(file)
+            file_data["overlays"].append(data)
+            file.seek(0)
+            json.dump(file_data, file, indent=4)
+            # update the parsed python object
+            self.overlays_database = file_data
+
+    def remove_json_obj(self, keyword, filename='res/overlay/database.json'):
+        for i in range(len(self.overlays_database["overlays"])):
+            print("keyword: ", self.overlays_database["overlays"][i]["keyword"])
+            if self.overlays_database["overlays"][i]["keyword"] == keyword:
+                self.overlays_database["overlays"].pop(i)
+                break
+
+        open(filename, 'w').write(json.dumps(self.overlays_database, sort_keys=True, indent=4, separators=(',', ': ')))

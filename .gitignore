@@ -6,3 +6,4 @@ __pycache__/
 /.vs/immunity-bot/FileContentIndex
 /.vs/immunity-bot/v17
 /.vs
+test/

@@ -90,7 +90,7 @@ class ImageFilterer:
 
         width = img.width
         height = img.height
-        skrillex_img = skrillex_img.resize([width, height]);
+        skrillex_img = skrillex_img.resize([width, height])
 
         img = img.convert("RGBA")
         data = img.getdata()
@@ -102,7 +102,14 @@ class ImageFilterer:
 
         img.putdata(new_data)
 
-        skrillex_img.paste(img, (0, 0), img);
+        skrillex_img.paste(img, (0, 0), img)
 
         return skrillex_img
 
+    def overlay_images(self, base: Image, overlay: Image):
+        width = base.width
+        height = base.height
+
+        overlay = overlay.resize([width, height])
+        base.paste(overlay, (0, 0), overlay)
+        return base

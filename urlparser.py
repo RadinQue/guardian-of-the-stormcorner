@@ -2,13 +2,14 @@ from PIL import Image
 from io import BytesIO
 import requests
 from soundfilterer import SoundFilterer
+import os
 
 soundfilterer = SoundFilterer()
 
 
 class URLParser:
 
-    supported_url_image_extensions = [".jpg", ".png", "bmp"]
+    supported_url_image_extensions = [".jpg", "jpeg", ".png", "bmp"]
 
     async def validate_url(self, url):
         return requests.get(url).status_code == 200
@@ -21,6 +22,10 @@ class URLParser:
 
     def get_image_object_from_url(self, image_url):
         return Image.open(BytesIO(requests.get(image_url).content))
+    
+    def get_extension_from_url(self, url):
+        filename, file_extension = os.path.splitext(url)
+        return file_extension
 
     def save_audio_from_url(self, url):
         r = requests.get(url, allow_redirects=True)
