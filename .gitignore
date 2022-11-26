@@ -7,3 +7,5 @@ __pycache__/
 /.vs/immunity-bot/v17
 /.vs
 test/
+res/overlay/
+res/overlay/database.json
