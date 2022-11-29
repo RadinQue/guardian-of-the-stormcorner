@@ -268,8 +268,18 @@ class Ops:
         # work out the command
         # if the params list is only 2 that means it's ..overlay 'keyword'
         if len(parameters) == 2:
-            keyword = parameters[1]
-            ret_img, error_msg = await overlay_obj.do_overlay(keyword)
+            command = parameters[1]
+            if command == "list":
+                ret_msg = await overlay_obj.list_overlay_keywords()
+
+                if ret_msg != "":
+                    await self.send_message_to_chat(ret_msg, message.channel)
+                else:
+                    await self.send_message_to_chat("No keywords in the database.", message.channel)
+
+                return
+
+            ret_img, error_msg = await overlay_obj.do_overlay(command)
 
             if error_msg == "":
                 await self.send_image_to_chat(ret_img, message.channel)
@@ -355,6 +365,14 @@ class OverlayCommand:
             return None, "Couldn't get image object."
 
         return filter_result, ""
+
+    async def list_overlay_keywords(self):
+        list_of_keywords = ""
+        for i in range(len(self.overlays_database["overlays"])):
+            list_of_keywords += self.overlays_database["overlays"][i]["keyword"]
+            list_of_keywords += "\n"
+
+        return list_of_keywords
 
     """ Helper Functions """
 
