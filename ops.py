@@ -279,12 +279,28 @@ class Ops:
 
                 return
 
+            # if not a preset command then it's a keyword
+            # attempt to look up and send
+
+            optional_command = ""
+            parsed_command = command.split("/", 2)
+            if len(parsed_command) == 2:
+                optional_command = parsed_command[1]
+                command = parsed_command[0]
+
+            keep_original = False
+            if optional_command == "keep" or optional_command == "keepog":
+                keep_original = True
+
             ret_img, error_msg = await overlay_obj.do_overlay(command)
 
             if error_msg == "":
                 await self.send_image_to_chat(ret_img, message.channel)
             else:
                 await self.send_message_to_chat(error_msg, message.channel)
+
+            if keep_original == False:
+                await message.delete()
 
             return
 
@@ -302,6 +318,9 @@ class Ops:
         elif intent == "remove" or intent == "delete":
             # overlay remove 'keyword'
             ret_msg = await overlay_obj.remove_overlay(keyword)
+        else:
+            await self.send_message_to_chat("Unrecognized command format", message.channel)
+            return
 
         if ret_msg != "":
             await self.send_message_to_chat(ret_msg, message.channel)
