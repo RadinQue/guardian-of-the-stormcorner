@@ -1,43 +1,11 @@
 from ops import Ops
 from messagereciever import MessageReciever
 import discord
-import os
-import pathlib
-import sys
-
-def get_datadir() -> pathlib.Path:
-    """
-    Returns a parent directory path
-    where persistent application data can be stored.
-
-    # linux: ~/.local/share
-    # macOS: ~/Library/Application Support
-    # windows: C:/Users/<USER>/AppData/Roaming
-    """
-
-    home = pathlib.Path().home()
-
-    if sys.platform == "win32":
-        return home / "AppData/Roaming"
-    elif sys.platform.startswith('linux'): # recommended idiom for compatibility
-        return home / ".local/share"
-    elif sys.platform == "darwin":
-        return home / "Library/Application Support"
-
-# create program dir
-my_datadir = get_datadir() / "immunity-bot"
-
-try:
-    my_datadir.mkdir(parents=True)
-except FileExistsError:
-    pass
-
+import os;
 
 # key path constants
-# key_directory_path = os.path.normpath(os.getenv('APPDATA') + "/immunity-bot")
-key_file_path = my_datadir / "key.txt"
-
-print(key_file_path)
+key_directory_path = os.path.normpath(os.getenv('APPDATA') + "/immunity-bot")
+key_file_path = key_directory_path + os.path.normpath("/key.txt")
 
 # API key to use when logging in
 api_key = ''
