@@ -61,8 +61,8 @@ async def on_ready():
 
     # if no key file was found and the API key worked, create the file
     if create_file:
-        if not os.path.exists(key_directory_path):
-            os.makedirs(key_directory_path)
+        if not os.path.exists(my_datadir):
+            os.makedirs(my_datadir)
             
         key_file = open(key_file_path, "w")
         key_file.write(api_key)
