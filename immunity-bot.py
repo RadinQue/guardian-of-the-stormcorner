@@ -1,11 +1,45 @@
 from ops import Ops
 from messagereciever import MessageReciever
 import discord
-import os;
+import os
+import pathlib
+import sys
+
+import logger
+
+def get_datadir() -> pathlib.Path:
+    """
+    Returns a parent directory path
+    where persistent application data can be stored.
+
+    # linux: ~/.local/share
+    # macOS: ~/Library/Application Support
+    # windows: C:/Users/<USER>/AppData/Roaming
+    """
+
+    home = pathlib.Path().home()
+
+    if sys.platform == "win32":
+        return home / "AppData/Roaming"
+    elif sys.platform.startswith('linux'): # recommended idiom for compatibility
+        return home / ".local/share"
+    elif sys.platform == "darwin":
+        return home / "Library/Application Support"
+
+# create program dir
+my_datadir = get_datadir() / "immunity-bot"
+
+try:
+    my_datadir.mkdir(parents=True)
+except FileExistsError:
+    pass
+
 
 # key path constants
-key_directory_path = os.path.normpath(os.getenv('APPDATA') + "/immunity-bot")
-key_file_path = key_directory_path + os.path.normpath("/key.txt")
+# key_directory_path = os.path.normpath(os.getenv('APPDATA') + "/immunity-bot")
+key_file_path = my_datadir / "key.txt"
+
+print(key_file_path)
 
 # API key to use when logging in
 api_key = ''
@@ -26,11 +60,12 @@ async def on_ready():
     waiting_for_server = False
     
     print('We have logged in as {0.user}'.format(client))
+    logger.init()
 
     # if no key file was found and the API key worked, create the file
     if create_file:
-        if not os.path.exists(key_directory_path):
-            os.makedirs(key_directory_path)
+        if not os.path.exists(my_datadir):
+            os.makedirs(my_datadir)
             
         key_file = open(key_file_path, "w")
         key_file.write(api_key)

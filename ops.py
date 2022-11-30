@@ -10,6 +10,8 @@ from PIL import Image
 import json
 import os
 
+import logger
+
 messageparser = MessageParser()
 imagefilterer = ImageFilterer()
 soundfilterer = SoundFilterer()
@@ -246,6 +248,8 @@ class Ops:
             print(e)
 
     async def do_heads_or_tails(self, message):
+        logger.log("Heads or tails?")
+
         result = bool(random.getrandbits(1))
         await self.send_message_to_chat("Flipping coin...", message.channel)
         time.sleep(1)
@@ -268,13 +272,39 @@ class Ops:
         # work out the command
         # if the params list is only 2 that means it's ..overlay 'keyword'
         if len(parameters) == 2:
-            keyword = parameters[1]
-            ret_img, error_msg = await overlay_obj.do_overlay(keyword)
+            command = parameters[1]
+            if command == "list":
+                ret_msg = await overlay_obj.list_overlay_keywords()
+
+                if ret_msg != "":
+                    await self.send_message_to_chat(ret_msg, message.channel)
+                else:
+                    await self.send_message_to_chat("No keywords in the database.", message.channel)
+
+                return
+
+            # if not a preset command then it's a keyword
+            # attempt to look up and send
+
+            optional_command = ""
+            parsed_command = command.split("/", 2)
+            if len(parsed_command) == 2:
+                optional_command = parsed_command[1]
+                command = parsed_command[0]
+
+            keep_original = False
+            if optional_command == "keep" or optional_command == "keepog":
+                keep_original = True
+
+            ret_img, error_msg = await overlay_obj.do_overlay(command)
 
             if error_msg == "":
                 await self.send_image_to_chat(ret_img, message.channel)
             else:
                 await self.send_message_to_chat(error_msg, message.channel)
+
+            if keep_original == False:
+                await message.delete()
 
             return
 
@@ -292,6 +322,9 @@ class Ops:
         elif intent == "remove" or intent == "delete":
             # overlay remove 'keyword'
             ret_msg = await overlay_obj.remove_overlay(keyword)
+        else:
+            await self.send_message_to_chat("Unrecognized command format", message.channel)
+            return
 
         if ret_msg != "":
             await self.send_message_to_chat(ret_msg, message.channel)
@@ -333,12 +366,14 @@ class OverlayCommand:
         return "Keyword: '" + keyword + "' was added an associated with '" + keyword + extension + "'"
 
     async def remove_overlay(self, keyword):
-        if self.search_resource(self.overlays_database, keyword) == None:
+        logger.log("Remove overlay requested. Keyword: " + keyword)
+
+        found_resource = self.search_resource(self.overlays_database, keyword)
+        if found_resource == None:
             return "Couldn't find the provided keyword.\nTo add it, type '..overlay add '" + keyword + "' and provide the image to associate it with!"
 
-        filename = self.search_resource(self.overlays_database, keyword)
         self.remove_json_obj(keyword)
-        os.remove("res/overlay/" + filename)
+        os.remove("res/overlay/" + found_resource)
         return "Successfully removed '" + keyword + "'."
 
     async def do_overlay(self, keyword):
@@ -356,14 +391,35 @@ class OverlayCommand:
 
         return filter_result, ""
 
+    async def list_overlay_keywords(self):
+        list_of_keywords = ""
+        for i in range(len(self.overlays_database["overlays"])):
+            list_of_keywords += self.overlays_database["overlays"][i]["keyword"]
+            list_of_keywords += "\n"
+
+        return list_of_keywords
+
     """ Helper Functions """
 
     def search_resource(self, jsondata, keyword):
+        logger.log("search_resource function call, keyword: " + keyword)
+
+        found_resource = None
+        log_keyvals = []
+        log_keyvals.append("Searched keyvals")
         for keyval in jsondata['overlays']:
+            log_keyvals.append(str(keyval))
             if keyword.lower() == keyval['keyword'].lower():
-                return keyval['resource']
+                found_resource = keyval['resource']
+                break
+
+        logger.log_array(log_keyvals)
+        return found_resource
+        
 
     def write_json(self, data, filename='res/overlay/database.json'):
+        logger.log("write_json function call, data: " + str(data))
+
         with open(filename, 'r+') as file:
             file_data = json.load(file)
             file_data["overlays"].append(data)
@@ -373,8 +429,9 @@ class OverlayCommand:
             self.overlays_database = file_data
 
     def remove_json_obj(self, keyword, filename='res/overlay/database.json'):
+        logger.log("remove_json_obj function call")
+
         for i in range(len(self.overlays_database["overlays"])):
-            print("keyword: ", self.overlays_database["overlays"][i]["keyword"])
             if self.overlays_database["overlays"][i]["keyword"] == keyword:
                 self.overlays_database["overlays"].pop(i)
                 break
