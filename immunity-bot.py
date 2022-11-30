@@ -5,6 +5,8 @@ import os
 import pathlib
 import sys
 
+import logger
+
 def get_datadir() -> pathlib.Path:
     """
     Returns a parent directory path
@@ -58,6 +60,7 @@ async def on_ready():
     waiting_for_server = False
     
     print('We have logged in as {0.user}'.format(client))
+    logger.init()
 
     # if no key file was found and the API key worked, create the file
     if create_file:

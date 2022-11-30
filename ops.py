@@ -10,6 +10,8 @@ from PIL import Image
 import json
 import os
 
+import logger
+
 messageparser = MessageParser()
 imagefilterer = ImageFilterer()
 soundfilterer = SoundFilterer()
@@ -246,6 +248,8 @@ class Ops:
             print(e)
 
     async def do_heads_or_tails(self, message):
+        logger.log("Heads or tails?")
+
         result = bool(random.getrandbits(1))
         await self.send_message_to_chat("Flipping coin...", message.channel)
         time.sleep(1)
@@ -362,12 +366,14 @@ class OverlayCommand:
         return "Keyword: '" + keyword + "' was added an associated with '" + keyword + extension + "'"
 
     async def remove_overlay(self, keyword):
-        if self.search_resource(self.overlays_database, keyword) == None:
+        logger.log("Remove overlay requested. Keyword: " + keyword)
+
+        found_resource = self.search_resource(self.overlays_database, keyword)
+        if found_resource == None:
             return "Couldn't find the provided keyword.\nTo add it, type '..overlay add '" + keyword + "' and provide the image to associate it with!"
 
-        filename = self.search_resource(self.overlays_database, keyword)
         self.remove_json_obj(keyword)
-        os.remove("res/overlay/" + filename)
+        os.remove("res/overlay/" + found_resource)
         return "Successfully removed '" + keyword + "'."
 
     async def do_overlay(self, keyword):
@@ -396,11 +402,24 @@ class OverlayCommand:
     """ Helper Functions """
 
     def search_resource(self, jsondata, keyword):
+        logger.log("search_resource function call, keyword: " + keyword)
+
+        found_resource = None
+        log_keyvals = []
+        log_keyvals.append("Searched keyvals")
         for keyval in jsondata['overlays']:
+            log_keyvals.append(str(keyval))
             if keyword.lower() == keyval['keyword'].lower():
-                return keyval['resource']
+                found_resource = keyval['resource']
+                break
+
+        logger.log_array(log_keyvals)
+        return found_resource
+        
 
     def write_json(self, data, filename='res/overlay/database.json'):
+        logger.log("write_json function call, data: " + str(data))
+
         with open(filename, 'r+') as file:
             file_data = json.load(file)
             file_data["overlays"].append(data)
@@ -410,8 +429,9 @@ class OverlayCommand:
             self.overlays_database = file_data
 
     def remove_json_obj(self, keyword, filename='res/overlay/database.json'):
+        logger.log("remove_json_obj function call")
+
         for i in range(len(self.overlays_database["overlays"])):
-            print("keyword: ", self.overlays_database["overlays"][i]["keyword"])
             if self.overlays_database["overlays"][i]["keyword"] == keyword:
                 self.overlays_database["overlays"].pop(i)
                 break
