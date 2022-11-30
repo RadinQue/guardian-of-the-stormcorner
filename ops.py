@@ -7,7 +7,7 @@ from urlparser import URLParser
 import discord
 from discord import Message
 from PIL import Image
-import json
+import overlay_command
 import os
 
 import logger
@@ -266,7 +266,7 @@ class Ops:
     ## Looks for a previously saved image and overlays that with the image in the message
     #  @param message The message from the user
     async def do_overlay(self, message):
-        overlay_obj = OverlayCommand(self.last_sent_image_url)
+        overlay_obj = overlay_command.OverlayCommand(self.last_sent_image_url)
 
         parameters = message.content.split(" ", 2)
         # work out the command
@@ -286,17 +286,19 @@ class Ops:
             # if not a preset command then it's a keyword
             # attempt to look up and send
 
-            optional_command = ""
-            parsed_command = command.split("/", 2)
-            if len(parsed_command) == 2:
-                optional_command = parsed_command[1]
-                command = parsed_command[0]
+            parsed_command = command.split("/")
+            command = parsed_command.pop(0)
 
             keep_original = False
-            if optional_command == "keep" or optional_command == "keepog":
-                keep_original = True
+            mirror = False
 
-            ret_img, error_msg = await overlay_obj.do_overlay(command)
+            for opt_cmd in parsed_command:
+                if opt_cmd == "keep" or opt_cmd == "keepog":
+                    keep_original = True
+                elif opt_cmd == "mirror":
+                    mirror = True
+
+            ret_img, error_msg = await overlay_obj.do_overlay(command, mirror)
 
             if error_msg == "":
                 await self.send_image_to_chat(ret_img, message.channel)
@@ -330,110 +332,3 @@ class Ops:
             await self.send_message_to_chat(ret_msg, message.channel)
 
         del overlay_obj
-
-
-class OverlayCommand:
-    image_url = "None"
-
-    overlays_database = None
-
-    def __init__(self, url):
-        self.overlays_database = json.load(open("res/overlay/database.json"))
-        self.image_url = url
-
-    async def add_overlay(self, keyword):
-        # check if keyword isn't already added
-        try:
-            image = urlparser.get_image_object_from_url(self.image_url)
-
-            if self.search_resource(self.overlays_database, keyword) != None:
-                return "Keyword '" + keyword + "' is already an existing keyword.\nTo delete it, type '..overlay delete " + keyword + "'."
-            
-            extension = urlparser.get_extension_from_url(self.image_url)
-
-            try:
-                image.save("res/overlay/" + keyword + extension)
-            except Exception as e:
-                print(e)
-                return "Could not save the image."
-        except:
-            return "Couldn't get image object."
-        
-        new_data = {"keyword": keyword,
-                    "resource": keyword + extension}
-
-        self.write_json(new_data)
-        return "Keyword: '" + keyword + "' was added an associated with '" + keyword + extension + "'"
-
-    async def remove_overlay(self, keyword):
-        logger.log("Remove overlay requested. Keyword: " + keyword)
-
-        found_resource = self.search_resource(self.overlays_database, keyword)
-        if found_resource == None:
-            return "Couldn't find the provided keyword.\nTo add it, type '..overlay add '" + keyword + "' and provide the image to associate it with!"
-
-        self.remove_json_obj(keyword)
-        os.remove("res/overlay/" + found_resource)
-        return "Successfully removed '" + keyword + "'."
-
-    async def do_overlay(self, keyword):
-        if self.search_resource(self.overlays_database, keyword) == None:
-            return None, "Couldn't find the provided keyword.\nTo add it, type '..overlay add '" + keyword + "' and provide the image to associate it with!"
-
-        try:
-            image = urlparser.get_image_object_from_url(self.image_url)
-            
-            filename = self.search_resource(self.overlays_database, keyword)
-            overlay = Image.open("res/overlay/" + filename)
-            filter_result = imagefilterer.overlay_images(image, overlay)
-        except:
-            return None, "Couldn't get image object."
-
-        return filter_result, ""
-
-    async def list_overlay_keywords(self):
-        list_of_keywords = ""
-        for i in range(len(self.overlays_database["overlays"])):
-            list_of_keywords += self.overlays_database["overlays"][i]["keyword"]
-            list_of_keywords += "\n"
-
-        return list_of_keywords
-
-    """ Helper Functions """
-
-    def search_resource(self, jsondata, keyword):
-        logger.log("search_resource function call, keyword: " + keyword)
-
-        found_resource = None
-        log_keyvals = []
-        log_keyvals.append("Searched keyvals")
-        for keyval in jsondata['overlays']:
-            log_keyvals.append(str(keyval))
-            if keyword.lower() == keyval['keyword'].lower():
-                found_resource = keyval['resource']
-                break
-
-        logger.log_array(log_keyvals)
-        return found_resource
-        
-
-    def write_json(self, data, filename='res/overlay/database.json'):
-        logger.log("write_json function call, data: " + str(data))
-
-        with open(filename, 'r+') as file:
-            file_data = json.load(file)
-            file_data["overlays"].append(data)
-            file.seek(0)
-            json.dump(file_data, file, indent=4)
-            # update the parsed python object
-            self.overlays_database = file_data
-
-    def remove_json_obj(self, keyword, filename='res/overlay/database.json'):
-        logger.log("remove_json_obj function call")
-
-        for i in range(len(self.overlays_database["overlays"])):
-            if self.overlays_database["overlays"][i]["keyword"] == keyword:
-                self.overlays_database["overlays"].pop(i)
-                break
-
-        open(filename, 'w').write(json.dumps(self.overlays_database, sort_keys=True, indent=4, separators=(',', ': ')))

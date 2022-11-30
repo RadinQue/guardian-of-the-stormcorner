@@ -1,5 +1,5 @@
 from typing import Literal
-from PIL import Image, ImageEnhance, ImageFilter
+from PIL import Image, ImageEnhance, ImageFilter, ImageOps
 import numpy as np
 from io import BytesIO
 from wand.color import Color
@@ -106,10 +106,13 @@ class ImageFilterer:
 
         return skrillex_img
 
-    def overlay_images(self, base: Image, overlay: Image):
+    def overlay_images(self, base: Image, overlay: Image, mirror=False):
         width = base.width
         height = base.height
 
         overlay = overlay.resize([width, height])
+        if mirror:
+            overlay = ImageOps.mirror(overlay)
+
         base.paste(overlay, (0, 0), overlay)
         return base
