@@ -11,6 +11,7 @@ import overlay_command
 import os
 
 import logger
+import traceback
 
 messageparser = MessageParser()
 imagefilterer = ImageFilterer()
@@ -231,6 +232,7 @@ class Ops:
     async def do_loudwarningcheck(self, message):
         try:
             if message.author.name == 'Cherry412':
+                logger.log("Warning Check")
                 extensionsToCheck = ['.mp3', '.wav', '.mp4']
                 self.potentiallyLoudFound=False
 
@@ -242,14 +244,13 @@ class Ops:
                         self.potentiallyLoudFound=True
                 
                 if self.potentiallyLoudFound:
-                    print("potentially loud media by cherry detected")
+                    logger.log("potentially loud media by cherry detected")
                     await self.send_message_to_chat(":warning: Potentially loud media sent by Cherry412 - check your volume levels before pressing play!! :warning: ", message.channel)
         except Exception as e:
-            print(e)
+            logger.log(e)
+            logger.log(traceback.extract_stack())
 
     async def do_heads_or_tails(self, message):
-        logger.log("Heads or tails?")
-
         result = bool(random.getrandbits(1))
         await self.send_message_to_chat("Flipping coin...", message.channel)
         time.sleep(1)

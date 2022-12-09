@@ -88,7 +88,6 @@ class OverlayCommand:
                 found_resource = keyval['resource']
                 break
 
-        logger.log_array(log_keyvals)
         return found_resource
         
 
