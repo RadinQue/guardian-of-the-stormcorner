@@ -235,7 +235,7 @@ class Ops:
                 if not message.content.startswith("http"):
                     return
 
-            if message.author.name == 'Cherry412' or message.author.name == 'RadinQue':
+            if message.author.name == 'Cherry412':
                 logger.log("Warning Check")
                 extensionsToCheck = ['.mp3', '.wav', '.mp4']
                 self.potentiallyLoudFound=False
