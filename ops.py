@@ -232,9 +232,10 @@ class Ops:
     async def do_loudwarningcheck(self, message):
         try:
             if len(message.attachments) == 0:
-                return
-                
-            if message.author.name == 'Cherry412':
+                if not message.content.startswith("http"):
+                    return
+
+            if message.author.name == 'Cherry412' or message.author.name == 'RadinQue':
                 logger.log("Warning Check")
                 extensionsToCheck = ['.mp3', '.wav', '.mp4']
                 self.potentiallyLoudFound=False
