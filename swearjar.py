@@ -1,4 +1,5 @@
 import json
+import random
 from dataclasses import dataclass, field
 
 database = 'res/swearjar.json'
@@ -68,13 +69,27 @@ class Swearjar:
     def query_everyone(self, file_data={}):
         ret_message = "Swearjar Stats:\n===\n"
 
+        total_forints_collected = 0
+
         for sw in file_data.keys():
             ret_message += "Word: " + sw + ".\n\n"
             for name in file_data[sw].keys():
                 ret_message += name + ": " + str(file_data[sw][name]["Sum"]) + "\n"
                 for bdk in file_data[sw][name]["Breakdown"].keys():
                     ret_message += " - " + bdk + ": " + str(file_data[sw][name]["Breakdown"][bdk]) + "\n"
-                ret_message += "This sums for " + str(file_data[sw][name]["Forints"]) + " forints in the swearjar\n\n"
+                
+                forints = file_data[sw][name]["Forints"]
+                ret_message += "This sums for " + str(forints) + " forints in the swearjar\n\n"
+
+                total_forints_collected = total_forints_collected + forints
+        
+        encourage_quips = [
+            "Way to go!",
+            "Keep on skrillin'!",
+            "Put your häăånds up!"
+        ]
+
+        ret_message += "All in all, we have collected " + str(total_forints_collected) + " forints. " + random.choice(encourage_quips)
 
         return ret_message
 
