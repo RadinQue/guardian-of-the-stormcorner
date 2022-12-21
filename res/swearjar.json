@@ -1,4 +1,28 @@
 {
     "Skrillex": {
+        "defasenpai": {
+            "Sum": 3,
+            "Breakdown": {
+                "skrillex": 3,
+                "skrill": 0
+            },
+            "Forints": 30
+        },
+        "Cherry412": {
+            "Sum": 1,
+            "Breakdown": {
+                "skrillex": 1,
+                "skrill": 0
+            },
+            "Forints": 10
+        },
+        "RadinQue": {
+            "Sum": 3,
+            "Breakdown": {
+                "skrill": 0,
+                "skrillex": 3
+            },
+            "Forints": 30
+        }
     }
 }

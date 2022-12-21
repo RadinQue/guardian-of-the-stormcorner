@@ -362,7 +362,7 @@ class Ops:
             for trigger in banned_word.triggers:
                 trigger_count = 0
                 for word in words_in_message:
-                    if trigger == word:
+                    if trigger == word.lower():
                         swear_sum = swear_sum + 1
                         trigger_count = trigger_count + 1
                 
