@@ -24,5 +24,15 @@
             },
             "Forints": 30
         }
+    },
+    "Skill Based Matchmaking": {
+        "RadinQue": {
+            "Sum": 2,
+            "Breakdown": {
+                "sbmm": 1,
+                "skillbased": 1
+            },
+            "Forints": 80
+        }
     }
 }

@@ -26,7 +26,12 @@ class Swearjar:
             "skrill",
             "skrillex",
         ],
-        10)
+        10),
+        BannedWordData("Skill Based Matchmaking", [
+            "sbmm",
+            "skillbased"
+        ],
+        40)
     }
     def update(self, json_object):
         with open(database, 'r+') as file:
@@ -72,14 +77,14 @@ class Swearjar:
         total_forints_collected = 0
 
         for sw in file_data.keys():
-            ret_message += "Word: " + sw + ".\n\n"
+            ret_message += "**Word: " + sw + ".**\n\n"
             for name in file_data[sw].keys():
                 ret_message += name + ": " + str(file_data[sw][name]["Sum"]) + "\n"
                 for bdk in file_data[sw][name]["Breakdown"].keys():
                     ret_message += " - " + bdk + ": " + str(file_data[sw][name]["Breakdown"][bdk]) + "\n"
                 
                 forints = file_data[sw][name]["Forints"]
-                ret_message += "This sums for " + str(forints) + " forints in the swearjar\n\n"
+                ret_message += "This sums for **" + str(forints) + "** forints in the swearjar\n\n"
 
                 total_forints_collected = total_forints_collected + forints
         
@@ -89,17 +94,22 @@ class Swearjar:
             "Put your häăånds up!"
         ]
 
-        ret_message += "All in all, we have collected " + str(total_forints_collected) + " forints. " + random.choice(encourage_quips)
+        ret_message += "All in all, we have collected **" + str(total_forints_collected) + "** forints. " + random.choice(encourage_quips)
 
         return ret_message
 
     def query_person(self, file_data, person):
         ret_message = "Swearjar Stats for " + person + "\n===\n"
         for sw in file_data.keys():
-            ret_message += "Word: " + sw + ".\n\n"
+            if not file_data[sw].get(person):
+                ret_message += "**Word: " + sw + ".**\n"
+                ret_message += "No recorded case.\n"
+                continue
+
+            ret_message += "**Word: " + sw + ".**\n\n"
             ret_message += "Total: " + str(file_data[sw][person]["Sum"]) + "\n"
             for bdk in file_data[sw][person]["Breakdown"].keys():
                 ret_message += " - " + bdk + ": " + str(file_data[sw][person]["Breakdown"][bdk]) + "\n"
-            ret_message += "This sums for " + str(file_data[sw][person]["Forints"]) + " forints in the swearjar\n\n"
+            ret_message += "This sums for **" + str(file_data[sw][person]["Forints"]) + "** forints in the swearjar\n\n"
 
         return ret_message
