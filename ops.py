@@ -8,6 +8,7 @@ import discord
 from discord import Message
 from PIL import Image
 import overlay_command
+import swearjar
 import os
 
 import logger
@@ -337,3 +338,55 @@ class Ops:
             await self.send_message_to_chat(ret_msg, message.channel)
 
         del overlay_obj
+
+    async def do_swearjar(self, message):
+        swearjar_obj = swearjar.Swearjar()
+
+        for banned_word in swearjar_obj.banned_word_list:
+            json_object = {
+                banned_word.name: {
+                    message.author.name: {
+                        "Sum": 0,
+                        "Breakdown": {},
+                        "Forints": 0
+                    }
+                }
+            }
+
+            triggers = {}
+            
+            swear_sum = 0
+
+            words_in_message = message.content.split(" ")
+
+            for trigger in banned_word.triggers:
+                trigger_count = 0
+                for word in words_in_message:
+                    if trigger == word:
+                        swear_sum = swear_sum + 1
+                        trigger_count = trigger_count + 1
+                
+                triggers[trigger] = trigger_count
+
+            for trigger_key in triggers.keys():
+                json_object[banned_word.name][message.author.name]["Breakdown"][trigger_key] = triggers.get(trigger_key)
+
+            json_object[banned_word.name][message.author.name]["Sum"] = swear_sum
+            json_object[banned_word.name][message.author.name]["Forints"] = swear_sum * banned_word.value
+
+            swearjar_obj.update(json_object)
+
+    async def do_query_swearjar(self, message):
+        parameters = message.content.split(" ", 2)
+        swearjar_obj = swearjar.Swearjar()
+
+        msg_to_send = ""
+
+        print(parameters)
+
+        if len(parameters) == 2:
+            msg_to_send = swearjar_obj.query(parameters[1])
+        else:
+            msg_to_send = swearjar_obj.query()
+
+        await self.send_message_to_chat(msg_to_send, message.channel)

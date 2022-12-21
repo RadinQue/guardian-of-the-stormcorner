@@ -4,6 +4,7 @@ class MessageReciever:
     """ Handles operator selection """
     async def do_handle_message(self, message, ops: Ops):
         await ops.do_loudwarningcheck(message)
+        await ops.do_swearjar(message)
 
         if message.content.startswith('..en'):
             await ops.do_enhance(message)
@@ -43,3 +44,6 @@ class MessageReciever:
 
         if message.content.startswith('..overlay'):
             await ops.do_overlay(message)
+
+        if message.content.startswith('..swearjar'):
+            await ops.do_query_swearjar(message)
