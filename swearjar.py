@@ -49,14 +49,12 @@ class Swearjar:
                     file_data[word][name]["Breakdown"][bdk] = file_data[word][name]["Breakdown"][bdk] + json_object[word][name]["Breakdown"][bdk]
 
             else:
-                print("don't exist, adding...")
+                print("name don't exist, adding...")
                 file_data[word].update(
                     {
                         name: json_object[word][name]
                     }
                 )
-
-            print(file_data[word][name])
 
             file.seek(0)
             json.dump(file_data, file, indent=4)
