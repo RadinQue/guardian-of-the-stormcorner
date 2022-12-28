@@ -5,6 +5,7 @@ class MessageReciever:
     async def do_handle_message(self, message, ops: Ops):
         await ops.do_loudwarningcheck(message)
         await ops.do_swearjar(message)
+        await ops.do_sadviolin(message)
 
         if message.content.startswith('..en'):
             await ops.do_enhance(message)

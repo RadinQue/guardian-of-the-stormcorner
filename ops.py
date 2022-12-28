@@ -390,3 +390,11 @@ class Ops:
             msg_to_send = swearjar_obj.query()
 
         await self.send_message_to_chat(msg_to_send, message.channel)
+
+    async def do_sadviolin(self, message):
+        trigger = "sadviolin"
+
+        # if it's nothing else but the word, delete og
+        if message.content == trigger:
+            await self.send_message_to_chat("https://www.youtube.com/watch?v=-EQ6eHeBrhM", message.channel)
+            await message.delete()
